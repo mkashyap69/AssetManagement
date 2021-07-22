@@ -19,6 +19,15 @@ app.use(mongoSanitize());
 app.use(cors());
 app.use(express.json());
 
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useFindAndModify: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log('DB STARTED'))
+  .catch((err) => console.log(err));
+
 if (cluster.isMaster) {
   const num_cpus = cpus().length;
 
