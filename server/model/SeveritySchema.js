@@ -13,4 +13,4 @@ const severitySchema = mongoose.Schema({
 
 const Severity = mongoose.model('Severity', severitySchema);
 
-export default Severity;
+module.exports=Severity;

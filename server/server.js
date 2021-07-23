@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const cluster = require('cluster');
+const authRouter = require('./routes/authRouter');
 const { cpus } = require('os');
 require('dotenv').config();
 
@@ -40,7 +41,9 @@ if (cluster.isMaster) {
     cluster.fork();
   });
 } else {
+  app.use('/api/v1/auth', authRouter);
+
   app.listen(port, () => {
-    console.log('SERVER STARTED');
+    console.log(`SERVER STARTED ON ${port}`);
   });
 }

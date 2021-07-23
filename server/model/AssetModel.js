@@ -19,4 +19,4 @@ const assetSchema = mongoose.Schema(
 
 const Asset = mongoose.model('Asset', assetSchema);
 
-export default Asset;
+module.exports= Asset;

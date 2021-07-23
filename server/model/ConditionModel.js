@@ -27,4 +27,4 @@ const conditionSchema = mongoose.Schema(
 
 const Condition = mongoose.model('Condition', conditionSchema);
 
-export default Condition;
+module.exports= Condition;
