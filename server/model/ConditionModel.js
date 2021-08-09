@@ -6,12 +6,8 @@ const conditionSchema = mongoose.Schema(
       type: String,
       required: [true, 'Condition is required'],
     },
-    severity: {
+    conditionDesc: {
       type: String,
-    },
-    asset: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Asset',
     },
     user: {
       type: mongoose.Schema.ObjectId,
@@ -19,12 +15,13 @@ const conditionSchema = mongoose.Schema(
     },
     source: String,
     parameters: String,
-    triggerCondition: Boolean,
+    triggerCondition: String,
     conditionExpression: String,
+    asset: { type: mongoose.Schema.ObjectId, ref: 'Condition' },
   },
   { timestamps: true }
 );
 
 const Condition = mongoose.model('Condition', conditionSchema);
 
-module.exports= Condition;
+module.exports = Condition;

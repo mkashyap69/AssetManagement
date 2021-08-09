@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../model/UserModel');
 const { promisify } = require('util');
+const catchAsync = require('../utils/catchAsync');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.SECRET_KEY, {
@@ -8,7 +9,7 @@ const signToken = (id) => {
   });
 };
 
-const login = async (req, res, next) => {
+const login = catchAsync(async (req, res, next) => {
   const { userName, password } = req.body;
 
   const user = await User.findOne({ userName }).select('+password');
@@ -37,8 +38,8 @@ const login = async (req, res, next) => {
       message: 'Please enter correct username and password',
     });
   }
-};
-const signup = async (req, res, next) => {
+});
+const signup = catchAsync(async (req, res, next) => {
   const { userName, password } = req.body;
 
   const user = await User.create({ userName, password });
@@ -53,9 +54,9 @@ const signup = async (req, res, next) => {
 
   user.password = undefined;
   res.status(200).json({ status: 'Success', token, data: user });
-};
+});
 
-const protect = async (req, res, next) => {
+const protect = catchAsync(async (req, res, next) => {
   if (
     !req.headers.authorization ||
     !req.headers.authorization.startsWith('Bearer')
@@ -65,16 +66,13 @@ const protect = async (req, res, next) => {
       .json({ status: 'Error', message: 'You are not authorized' });
     return;
   }
-
+  const token = req.headers.authorization.split(' ')[1];
   if (!token) {
     res.status(401).json({ status: 'Error', message: 'You are not logged in' });
     return;
   }
 
-  const token = req.headers.authorization.split(' ')[1];
-
   const decoded = await promisify(jwt.verify)(token, process.env.SECRET_KEY);
-
   const user = await User.findById(decoded.id);
 
   if (!user) {
@@ -85,6 +83,6 @@ const protect = async (req, res, next) => {
   }
   req.user = user;
   next();
-};
+});
 
 module.exports = { login, signup, protect };

@@ -1,0 +1,15 @@
+{
+    "name":"Asset_001",
+    "type":"Desktop",
+    "manufacturer":"HP",
+    "model":"HP_001",
+    "description":"Description",
+    "version":"2.334",
+    "serialNumber":"PCIN4632",
+    "areaName":"Pune",
+    "conditionName":"Heating",
+    "source":"Disk",
+    "parameters":"NA",
+    "triggerCondition":"20 minutes usage",
+    "conditionExpression":"NA"
+  }

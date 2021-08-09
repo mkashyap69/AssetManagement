@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const hpp = require('hpp');
 const mongoSanitize = require('express-mongo-sanitize');
 const cors = require('cors');
@@ -6,6 +7,8 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const cluster = require('cluster');
 const authRouter = require('./routes/authRouter');
+const assetRouter = require('./routes/assetRoutes');
+const errorController = require('./controller/errorController');
 const { cpus } = require('os');
 require('dotenv').config();
 
@@ -42,6 +45,12 @@ if (cluster.isMaster) {
   });
 } else {
   app.use('/api/v1/auth', authRouter);
+  app.use('/api/v1/asset', assetRouter);
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/public/build/index.html'));
+  });
+  app.use(errorController);
 
   app.listen(port, () => {
     console.log(`SERVER STARTED ON ${port}`);
